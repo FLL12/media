@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>在html5中播放音频</title>
+
+</head>
+<body>
+   <audio id="audio" src="https://raw.githubusercontent.com/kolber/audiojs/master/mp3/bensound-dubstep.mp3" controls="controls" preload="auto" loop>
+   	 Your browser does not support the audio tag.
+	</audio>
+	
+	<button class="play" type="button">播放</button>
+	<button class="pause" type="button">暂停</button>
+	<button class="mute" type="button">静音</button>
+	<hr/>
+	音量：<input name="volume" type="range" min="1" max="10" value="5"> <span class="volume"></span>
+	<hr/>
+	进度：<input name="schedule" type="range" min="1" max="10" value="1"> <span class="schedule"></span>
+	<hr/>
+	<div class="ended"></div>
+</body>
+<script type="text/javascript" src="./jquery-1.10.2.min.js"></script>
+<script> 
+    $(function() {
+        var audio = document.getElementById('audio'); // 不支持$('#audio')
+
+      
+        /* 播放 */
+        $('.play').click(function() {
+            audio.volume = 0.5; // 设置竟是
+            $('.volume').text(audio.volume);
+            audio.play(); // 播放
+        });  
+
+        /* 暂停 */
+        $('.pause').click(function() {
+            audio.pause();
+        });
+
+        /* 静音 */
+        $('.mute').click(function() {
+            if(audio.muted) {
+                $(this).text('静音');
+                audio.muted = false;
+            } else {
+                $(this).text('取消静音');
+                audio.muted = true;
+            }
+        });
+
+        /* 设置音量 */
+        $('[name="volume"]').change(function() {
+            var volume = $(this).val() / 10;
+            audio.volume = volume;
+            $('.volume').text(volume);
+        });
+
+        /* 进度控制 */
+        $('[name="schedule"]').change(function() {
+            var audioLength = audio.duration;  // 获取当前音频的长度
+            var unit = audioLength / parseInt($(this).attr('max')); // 每1格对应的实例秒数
+            audio.currentTime = $(this).val() * unit;
+            $('.schedule').text(audio.currentTime+'秒');
+        });
+    });
+</script>
+
+</html>
